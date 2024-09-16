@@ -1,0 +1,43 @@
+{% extends 'infotemp.html' %}
+{% load static %}
+
+<head>
+    <style>
+        .card {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<!--
+fname = request.POST.get('fname')
+lname = request.POST.get('lname')
+phonenum = request.POST.get('phonenum')
+email = request.POST.get('email')
+add1 = request.POST.get('add1')
+add2 = request.POST.get('add2')
+city = request.POST.get('city')
+region = request.POST.get('region')
+zipc = request.POST.get('zipc')
+-->
+
+{% block title %} Thank you! {% endblock %}
+
+{% block content %} 
+    <p> Thank you for your order! Here are your details: </p>
+    <table><tbody>
+    {% for Customer in Customer %}
+    <tr>
+        <td>{{ Customer.fname }}</td>
+        <td>{{ Customer.lname }}</td>
+        <td>{{ Customer.phonenum }}</td>
+        <td>{{ Customer.email }}</td>
+        <td>{{ Customer.add1 }}</td>
+        <td>{{ Customer.add2 }}</td>
+        <td>{{ Customer.city }}</td>
+        <td>{{ Customer.region }}</td>
+        <td>{{ Customer.zipc }}</td>
+    </tr>
+    {% endfor %}
+    </table></tbody>
+{% endblock %}

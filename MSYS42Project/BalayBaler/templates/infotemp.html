@@ -1,3 +1,66 @@
+{% load static %}
+<!--
+document colors:
+Cream: #f8f4e9
+Blush: #b67b67
+White: #fefbf6
+-->
+
 <html>
-    <p> hi hi hi </p>
+    <head>
+        <title>Balay Baler Order Form</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+            html {
+                background-color: #f8f4e9;
+                font-family: "Montserrat", sans-serif;
+            }
+            p.nav {
+                text-align: left;
+                padding-left: 20px;
+                position: relative;
+                top: 50%;
+                -ms-transform: translateY(-50%);
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+            }
+            .title {
+                width: 40%;
+                height: 80%;
+                font-size: 100px;
+                font-family: "Montserrat", sans-serif;
+                font-weight: 800;
+                color: #b67b67;
+                border-right: solid #b67b67 3px;
+                padding: 25px;
+                margin-top: 10px;
+                float: left;
+            }
+            .navbar {
+                width: 101%;
+                height: 50px;
+                background-color: #b67b67;
+                color: #f8f4e9;
+                margin-top: -10px;
+                margin-left: -10px;
+                margin-right: -10px;
+            }
+            .content {
+                overflow: hidden;
+                color: #b67b67;
+                padding: 25px;
+                margin-top: 10px;
+            }
+            .wrapper {
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar"><p class="nav">Home | Catalogue | Cart</p></div>
+        <div class="wrapper">
+            <div class="title">{% block title %}Title{% endblock %}</div>
+            <div class="content">{% block content %}type{% endblock %}</div>
+        </div>
+    </body>
 <html>
