@@ -25,7 +25,20 @@ zipc = request.POST.get('zipc')
 
 {% block content %} 
     <p> Thank you for your order! Here are your details: </p>
-    <table><tbody>
+    <table><thead>
+    <tr>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Phone Number</td>
+        <td>Email</td>
+        <td>Address Line One</td>
+        <td>Address Line Two</td>
+        <td>City</td>
+        <td>Region</td>
+        <td>ZIP Code</td>
+    </tr>
+    </thead>
+    <tbody>
     {% for Customer in Customer %}
     <tr>
         <td>{{ Customer.fname }}</td>
