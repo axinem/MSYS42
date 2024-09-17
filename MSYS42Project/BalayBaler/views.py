@@ -23,5 +23,12 @@ def checkout(request):
     return render(request, 'checkout.html')
 
 def thankyou(request):
-    customer = Customer.objects.all()
+    num = len(Customer.objects.all())
+    customer = Customer.objects.order_by('id')[num-1]
+
     return render(request, 'thankyou.html', {'Customer': customer})
+
+def dashboard(request):
+    customer = Customer.objects.all()
+
+    return render(request, 'dashboard.html', {'Customer': customer})

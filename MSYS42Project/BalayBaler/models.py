@@ -14,3 +14,4 @@ class Customer(models.Model):
     city = models.CharField(max_length=300)
     region = models.CharField(max_length=30)
     zipc = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
