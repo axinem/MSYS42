@@ -1,0 +1,77 @@
+{% extends 'infotemp.html' %}
+{% block content %}
+
+<style>
+    .product-detail {
+        display: flex;
+        justify-content: space-between;
+        margin: 50px;
+    }
+    .product-image {
+        max-width: 400px;
+        max-height: 400px;
+    }
+    .product-info {
+        max-width: 500px;
+    }
+    .product-info h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+    .product-info p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .quantity-controls button {
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
+    .quantity-controls input {
+        width: 60px;
+        text-align: center;
+        font-size: 16px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="product-detail">
+        <img src="{% static 'images/'|add:product.image %}" alt="{{ product.name }}" class="product-image">
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p>{{ product.description }}</p>
+            <p class="product-price">₱{{ product.price }}</p>
+
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <div class="quantity-controls">
+                    <button type="button" onclick="decreaseQuantity()">-</button>
+                    <input type="text" name="quantity" value="1" id="quantity" readonly>
+                    <button type="button" onclick="increaseQuantity()">+</button>
+                </div>
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function increaseQuantity() {
+        var quantityInput = document.getElementById('quantity');
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    }
+
+    function decreaseQuantity() {
+        var quantityInput = document.getElementById('quantity');
+        if (parseInt(quantityInput.value) > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    }
+</script>
+
+{% endblock %}
