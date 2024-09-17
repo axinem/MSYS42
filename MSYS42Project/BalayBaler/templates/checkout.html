@@ -1,58 +1,119 @@
 {% extends 'infotemp.html' %}
-{% load static %}
+{% block title %} Checkout {% endblock %}
+{% block extra_styles %}
 
-<head>
     <style>
         .card {
             background-color: black;
+            padding: 20px;
+            color: white;
+        }
+        .form-label {
+            color: white;
+        }
+        .form-control {
+            border-radius: 20px;
+            font-size: 15px;
+            margin-bottom: 15px; 
+        }
+        .btn-primary {
+            border-radius: 20px;
+            font-size: 15px;
+        }
+        .header-section {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 20px;
+        }
+        .header-section h1 {
+            margin: 0;
+        }
+        .container {
+            max-width: 800px; 
         }
     </style>
-</head>
 
-{% block title %} Checkout {% endblock %}
+{% endblock %}
 
-{% block content %} 
-    <div class="card">
-        <!--
-        fname = request.POST.get('fname')
-        lname = request.POST.get('lname')
-        phonenum = request.POST.get('phonenum')
-        email = request.POST.get('email')
-        add1 = request.POST.get('add1')
-        add2 = request.POST.get('add2')
-        city = request.POST.get('city')
-        region = request.POST.get('region')
-        zipc = request.POST.get('zipc')
-        -->
+{% block content %}
+    <div class="container mt-5">
+        <div class="card">
+            <div class="header-section">
+                <h1>Checkout</h1>
+                <form method="POST" action="{% url 'checkout' %}">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="fname" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name...">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="lname" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name...">
+                            </div>
+                        </div>
+                    </div>
 
-        <form method="POST" action="{% url 'checkout' %}">{% csrf_token %}
-            <label for="fname"> First Name </label>
-            <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name...">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phonenum" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phonenum" name="phonenum" placeholder="Phone Number...">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email...">
+                            </div>
+                        </div>
+                    </div>
 
-            <label for="lname"> Last Name </label>
-            <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name...">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="add1" class="form-label">Address Line One</label>
+                                <input type="text" class="form-control" id="add1" name="add1" placeholder="Address Line One...">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="add2" class="form-label">Address Line Two</label>
+                                <input type="text" class="form-control" id="add2" name="add2" placeholder="Address Line Two...">
+                            </div>
+                        </div>
+                    </div>
 
-            <label for="phonenum"> Phone Number </label>
-            <input type="text" class="form-control" id="phonenum" name="phonenum" placeholder="Phone Number...">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" placeholder="City...">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="region" class="form-label">Region</label>
+                                <input type="text" class="form-control" id="region" name="region" placeholder="Region...">
+                            </div>
+                        </div>
+                    </div>
 
-            <label for="email"> Email </label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="Email...">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="zipc" class="form-label">ZIP Code</label>
+                                <input type="text" class="form-control" id="zipc" name="zipc" placeholder="ZIP Code...">
+                            </div>
+                        </div>
+                    </div>
 
-            <label for="add1"> Address Line One </label>
-            <input type="text" class="form-control" id="add1" name="add1" placeholder="Address Line One...">
-
-            <label for="add2"> Address Line Two </label>
-            <input type="text" class="form-control" id="add2" name="add2" placeholder="Address Line Two...">
-
-            <label for="city"> City </label>
-            <input type="text" class="form-control" id="city" name="city" placeholder="City...">
-
-            <label for="region"> Region </label>
-            <input type="text" class="form-control" id="region" name="region" placeholder="Region...">
-
-            <label for="zipc"> ZIP Code </label>
-            <input type="text" class="form-control" id="zipc" name="zipc" placeholder="ZIP Code...">
-
-            <button type="submit">Checkout</button>
+                    <button type="submit" class="btn btn-primary">Checkout</button>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

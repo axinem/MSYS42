@@ -25,3 +25,12 @@ def checkout(request):
 def thankyou(request):
     customer = Customer.objects.all()
     return render(request, 'thankyou.html', {'Customer': customer})
+
+def catalog(request):
+    return render(request, 'catalog.html')
+
+def cart(request):
+    return render(request, 'cart.html')
+    
+    
+    
