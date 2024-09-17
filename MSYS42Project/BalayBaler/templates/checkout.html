@@ -4,12 +4,11 @@
 
     <style>
         .card {
-            background-color: black;
             padding: 20px;
             color: white;
         }
         .form-label {
-            color: white;
+            color: #c77663;
         }
         .form-control {
             border-radius: 20px;
@@ -40,7 +39,7 @@
     <div class="container mt-5">
         <div class="card">
             <div class="header-section">
-                <h1>Checkout</h1>
+                <h1 class="mb-4">Checkout</h1>
                 <form method="POST" action="{% url 'checkout' %}">{% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">

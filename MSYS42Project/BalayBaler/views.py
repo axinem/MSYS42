@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Customer
+from .models import Customer, Product
+from django.contrib import messages
+from django.views.generic import DetailView
+from .models import Product
 
-# Create your views here.
 
 def base(request):
     return render(request, 'infotemp.html')
@@ -31,6 +33,18 @@ def catalog(request):
 
 def cart(request):
     return render(request, 'cart.html')
-    
-    
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'catalog.html', {'products': products})
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_detail.html'
+    context_object_name = 'product'
+
+def add_to_cart(request, pk):
+    product = Product.objects.get(pk=pk)
+    quantity = int(request.POST.get('quantity', 1))
+    return redirect('catalog')
     

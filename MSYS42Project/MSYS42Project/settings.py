@@ -121,6 +121,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",  
+    '/Users/ri/Documents/GitHub/MSYS42/MSYS42Project/BalayBaler/static',
 ]
 
 # Default primary key field type
