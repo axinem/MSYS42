@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -14,17 +15,42 @@ class Customer(models.Model):
     region = models.CharField(max_length=30)
     zipc = models.CharField(max_length=10)
 
-from django.db import models
-from django.contrib.auth.models import User
+
+class Size(models.Model):
+    SIZE_CHOICES = [
+        ('100g', '100g'),
+        ('1L', '1L'),
+        ('6L', '6L'),
+    ]
+    size = models.CharField(max_length=10, choices=SIZE_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.size
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='product_images/', blank=True, null=True)
+    image = models.ImageField(upload_to='products/')
+    available_sizes = models.ManyToManyField(Size, through='ProductSizeStock')
 
     def __str__(self):
         return self.name
+
+
+class ProductSizeStock(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
+    stock_level = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        unique_together = ('product', 'size')
+
+    def __str__(self):
+        return f"{self.product.name} - {self.size.size} (Stock: {self.stock_level}, Price: ₱{self.price})"
+
+
 
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

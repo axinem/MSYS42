@@ -31,6 +31,10 @@ def thankyou(request):
 def catalog(request):
     return render(request, 'catalog.html')
 
+def catalog_view(request):
+    products = Product.objects.prefetch_related('productsizestock_set__size').all()  
+    return render(request, 'catalog.html', {'products': products})
+
 def cart(request):
     return render(request, 'cart.html')
 
