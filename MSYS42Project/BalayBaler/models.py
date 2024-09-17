@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from phonenumber_field.modelfields import PhoneNumberField
+#from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Customer(models.Model):
+    date_created = models.DateTimeField(auto_now_add = True)
     fname = models.CharField(max_length=300)
     lname = models.CharField(max_length=300)
     phonenum = models.CharField(null=False, blank=False, unique=True, max_length=20)
