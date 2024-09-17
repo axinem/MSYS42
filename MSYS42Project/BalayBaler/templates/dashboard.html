@@ -24,9 +24,10 @@ zipc = request.POST.get('zipc')
 {% block title %} Thank you! {% endblock %}
 
 {% block content %} 
-    <p> Thank you for your order! Here are your details: </p>
+    <p> dashboard </p>
     <table><thead>
     <tr>
+        <td>Date Ordered</td>
         <td>First Name</td>
         <td>Last Name</td>
         <td>Phone Number</td>
@@ -39,7 +40,9 @@ zipc = request.POST.get('zipc')
     </tr>
     </thead>
     <tbody>
+    {% for Customer in Customer %}
     <tr>
+        <td>{{ Customer.created_at }}</td>
         <td>{{ Customer.fname }}</td>
         <td>{{ Customer.lname }}</td>
         <td>{{ Customer.phonenum }}</td>
@@ -50,5 +53,6 @@ zipc = request.POST.get('zipc')
         <td>{{ Customer.region }}</td>
         <td>{{ Customer.zipc }}</td>
     </tr>
+    {% endfor %}
     </table></tbody>
 {% endblock %}
