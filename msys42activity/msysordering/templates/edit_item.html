@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Edit or Add Item">
+    <title>{% if form.instance.pk %}Edit Item{% else %}Add New Item{% endif %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="py-5 text-center">
+        <h2>{% if form.instance.pk %}Edit Item{% else %}Add New Item{% endif %}</h2>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <form method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary btn-lg" type="submit">
+              {% if form.instance.pk %}Update Item{% else %}Add Item{% endif %}
+            </button>
+            <a href="{% url 'item_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>

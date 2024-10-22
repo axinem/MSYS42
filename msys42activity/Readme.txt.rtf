@@ -1,0 +1,59 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2759
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs24 \cf2 \expnd0\expndtw0\kerning0
+URL Patterns\
+
+\f1\b0 Project: msys42activity\
+App: msysordering\
+\
+\
+Changes made: October 8, 2024\
+- Updated Item model\
+- Added Order and ItemOrder models\
+- Created create_order, add_items_to_order, view_order, delete_item_from_order views\
+- Updated URLS\
+- Added a create_order.html template (not complete yet)\
+\
+\
+\
+\
+\
+\
+\
+\
+1. Homepage\
+- URL Path: `/`\
+- Description: The landing page where you can create an order by adding items to your cart and checking out. The \'91Configure Items\'92 at the bottom would link to the Item List page.\
+\
+\
+2. Item List\
+- URL Path: `/item_list/`\
+- Description: Displays a list of all items available in the database, and allows users to view, add, edit, or delete the items. \
+- REQUIRED INTERFACE 1: Displaying all available items\
+\
+\
+3. Add Item\
+- URL Path: `/add_item/`\
+- Description: A form for inputting new item/s to the database. \
+- REQUIRED INTERFACE 2: Adding a new item (will need a form for this)\
+\
+\
+4. Edit Item\
+- URL Path: `/edit_item/<int:pk>/`\
+- Description: A similar interface to Add Item where a user can edit details of an existing item.\
+- REQUIRED INTERFACE 4: Updating the details of a specific item (could reuse the form for adding a new item)\
+\
+\
+5. Delete Item\
+- URL Path: `/delete_item/<int:pk>/`\
+- Description: User can delete the item.\
+- REQUIRED INTERFACE 3: Deleting a specific item\
+\
+\
+}
