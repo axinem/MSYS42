@@ -1,18 +1,24 @@
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from . import views
-from .views import product_list, ProductDetailView, add_to_cart
+from .views import add_to_cart, cart_view, process_order, thankyou
 
-urlpatterns=[
-    path('', views.base, name='infotemp'),
-    path('infotemp/', views.base, name='infotemp'),
-    path('catalog/', views.catalog, name='catalog'),
-    path('cart/', views.cart, name='cart'),
-    path('checkout', views.checkout, name='checkout'),
-    path('thankyou', views.thankyou, name='thankyou'),
-    path('dashboard', views.dashboard, name='dashboard'),
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('info/', views.info_view, name='info'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('products/', views.product_list, name='product_list'),
+    path('add-to-cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
+    path('cart/', cart_view, name='cart'),
+    path('cart/update/', views.update_cart, name='update_cart'),
     path('admin/', admin.site.urls),
-    path('product/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
-    path('add-to-cart/<int:pk>/', add_to_cart, name='add_to_cart')
+    path('checkout/', views.checkout, name='checkout'),
+    path('process_order/', process_order, name='process_order'),
+    path('thankyou/', thankyou, name='thankyou'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

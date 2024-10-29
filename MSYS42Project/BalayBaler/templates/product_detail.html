@@ -1,17 +1,74 @@
-{% extends 'infotemp.html' %}
+{% extends 'base.html' %}
+
 {% block content %}
 
+<style>
+    h1 {
+        margin-bottom: 30px;
+        text-align: left;
+    }
+    .product-image {
+        margin-top: 100px;
+        max-width: 300px;
+        height: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        border-radius:20px;
+        margin-right: 50px;
+    }
+    .description {
+        white-space: pre-wrap;
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+</style>
 
-<div class="container mt-5">
-    <h1>{{ product.name }}</h1>
-    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 400px;">
-    <p>{{ product.description }}</p>
+<div class="container mt-5">    
+    <div class="d-flex">
+        <div class="pe-5"> 
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image"> 
+        </div>
+        
+        <div>
+            <h1>{{ product.name }}</h1>
 
-    <h3>Available Sizes:</h3>
-    <ul>
-        {% for stock in product.productsizestock_set.all %}
-        <li>Size: {{ stock.size.size }} - Price: ₱{{ stock.price }} - Stock: {{ stock.stock_level }}</li>
-        {% endfor %}
-    </ul>
+            <div class="description">{{ product.description }}</div>
+
+            <h5>Available Sizes and Prices</h5>
+            <ul>
+                <li>100g: {{ product.price_100g }} - {{ product.stock_100g }} in stock</li>
+                <li>4L: {{ product.price_4L }} - {{ product.stock_4L }} in stock</li>
+                <li>6L: {{ product.price_6L }} - {{ product.stock_6L }} in stock</li>
+            </ul>
+
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <label for="size">Choose Size:</label>
+                <select name="size" id="size" onchange="updatePrice()">
+                    <option value="100g" data-price="{{ product.price_100g }}">100g</option>
+                    <option value="4L" data-price="{{ product.price_4L }}">4L</option>
+                    <option value="6L" data-price="{{ product.price_6L }}">6L</option>
+                </select>
+
+                <h6 id="selected-price">Price: {{ product.price_100g }}</h6>
+                
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock_100g|default:0 }}" required>
+
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Back</a> 
+    </div>
 </div>
+
+<script>
+    function updatePrice() {
+        const sizeSelect = document.getElementById('size');
+        const selectedPrice = sizeSelect.options[sizeSelect.selectedIndex].getAttribute('data-price');
+        document.getElementById('selected-price').innerText = 'Price: ' + selectedPrice;
+    }
+</script>
 {% endblock %}

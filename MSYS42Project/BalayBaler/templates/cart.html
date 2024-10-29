@@ -1,80 +1,57 @@
-{% extends 'infotemp.html' %}
-
-{% block extra_styles %}
-    <style>
-        .container {
-            max-width: 1000px;
-            display: flex;
-            justify-content: center;
-            margin: 50px;
-        }
-        .card {
-            padding: 20px;
-            color: #c77663;
-            border: 1px solid #c77663;
-        }
-        .header-section {
-            margin-bottom: 20px;
-        }
-        .summary-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #c77663; 
-        }
-        .summary-table th, .summary-table td {
-            border: 1px solid #c77663;
-            padding: 15px; 
-            text-align: center;
-        }
-        .btn-primary {
-            border-radius: 20px;
-            font-size: 15px;
-        }
-        .btn-container {
-            margin-top: 20px;
-            text-align: right;
-        }
-    </style>
-    {% endblock %}
+# cart.html
+{% extends 'base.html' %}
 
 {% block content %}
-    <div class="container mt-5">
-        <div class="card">
-            <div class="header-section">
-                <h1>My Cart</h1>
-            </div>
-            
-            <table class="summary-table">
+<div class="container mt-5">
+    <h1>My Cart</h1>
+    {% if items %}
+        <form method="post" action="{% url 'update_cart' %}">
+            {% csrf_token %}
+            <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Product</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
                         <th>Price</th>
-                        <th>Qty</th>
-                        <th>Total</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Product Name</td>
-                        <td>₱29.99</td>
-                        <td>2</td>
-                        <td>₱59.98</td>
-                    </tr>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.size }}</td>
+                            <td>
+                                <input type="number" name="quantity_{{ item.id }}" value="{{ item.quantity }}" min="0" class="form-control">
+                            </td>
+                            <td>
+                                {% if item.size == '100g' %}
+                                    {{ item.product.price_100g|floatformat:2 }}
+                                {% elif item.size == '4L' %}
+                                    {{ item.product.price_4L|floatformat:2 }}
+                                {% elif item.size == '6L' %}
+                                    {{ item.product.price_6L|floatformat:2 }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button type="submit" name="delete_item" value="{{ item.id }}" class="btn btn-danger">Delete</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" style="text-align: right;">Subtotal:</td>
-                        <td>₱59.98</td>
-                    </tr>
-                </tfoot>
             </table>
-            
-            <div class="btn-container">
-                <button type="button" class="btn btn-primary">Update Cart</button>
-                <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <h3>Total: {{ total_price|floatformat:2 }}</h3>
+                <div>
+                    <button type="submit" class="btn btn-primary mr-3">Update Cart</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Continue Shopping</a>
+                    <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+                </div>
             </div>
-        </div>
-    </div>
+        </form>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
 {% endblock %}

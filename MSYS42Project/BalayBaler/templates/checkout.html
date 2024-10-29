@@ -1,57 +1,64 @@
-{% extends 'infotemp.html' %}
+{% extends 'base.html' %}
 {% block title %} Checkout {% endblock %}
+
 {% block extra_styles %}
-
-    <style>
-        .card {
-            padding: 20px;
-            color: white;
-        }
-        .form-label {
-            color: #c77663;
-        }
-        .form-control {
-            border-radius: 20px;
-            font-size: 15px;
-            margin-bottom: 15px; 
-        }
-        .btn-primary {
-            border-radius: 20px;
-            font-size: 15px;
-        }
-        .header-section {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 20px;
-        }
-        .header-section h1 {
-            margin: 0;
-        }
-        .container {
-            max-width: 800px; 
-        }
-    </style>
-
+<style>
+    .card {
+        padding: 20px;
+        color: white;
+    }
+    .form-label {
+        color: #c77663;
+    }
+    .form-control {
+        border-radius: 20px;
+        font-size: 15px;
+        margin-bottom: 15px; 
+    }
+    .btn-primary {
+        border-radius: 20px;
+        font-size: 15px;
+    }
+    .header-section {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+    .header-section h1 {
+        margin: 0;
+    }
+    .container {
+        max-width: 800px; 
+    }
+</style>
 {% endblock %}
 
 {% block content %}
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+                {{ message }}<br>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="container mt-5">
         <div class="card">
             <div class="header-section">
                 <h1 class="mb-4">Checkout</h1>
-                <form method="POST" action="{% url 'checkout' %}">{% csrf_token %}
+                <form method="POST" action="{% url 'process_order' %}">{% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="fname" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name...">
+                                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name..." required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="lname" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name...">
+                                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name..." required>
                             </div>
                         </div>
                     </div>
@@ -60,59 +67,120 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="phonenum" class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" id="phonenum" name="phonenum" placeholder="Phone Number...">
+                                <input type="text" class="form-control" id="phonenum" name="phonenum" placeholder="Phone Number..." required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email...">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email..." required>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="add1" class="form-label">Address Line One</label>
-                                <input type="text" class="form-control" id="add1" name="add1" placeholder="Address Line One...">
+                    <div class="mb-3">
+                        <label for="delivery_type" class="form-label">Delivery or Pickup</label>
+                        <select id="delivery_type" name="delivery_type" class="form-control" onchange="toggleFields(this.value)">
+                            <option value="">Select...</option>
+                            <option value="delivery">Delivery</option>
+                            <option value="pickup">Pickup</option>
+                        </select>
+                    </div>
+
+                    <div id="delivery-fields" style="display:none;">
+                        <h3>Delivery Details</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="add1" class="form-label">Address Line One</label>
+                                    <input type="text" class="form-control" id="add1" name="add1" placeholder="Address Line One..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="add2" class="form-label">Address Line Two</label>
+                                    <input type="text" class="form-control" id="add2" name="add2" placeholder="Address Line Two...">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="add2" class="form-label">Address Line Two</label>
-                                <input type="text" class="form-control" id="add2" name="add2" placeholder="Address Line Two...">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">City</label>
+                                    <select id="city" name="city" class="form-control" required>
+                                        <option value="">Select City...</option>
+                                        <option value="Manila">Manila</option>
+                                        <option value="Caloocan">Caloocan</option>
+                                        <option value="Las Piñas">Las Piñas</option>
+                                        <option value="Makati">Makati</option>
+                                        <option value="Malabon">Malabon</option>
+                                        <option value="Mandaluyong">Mandaluyong</option>
+                                        <option value="Marikina">Marikina</option>
+                                        <option value="Muntinlupa">Muntinlupa</option>
+                                        <option value="Navotas">Navotas</option>
+                                        <option value="Parañaque">Parañaque</option>
+                                        <option value="Pasay">Pasay</option>
+                                        <option value="Pasig">Pasig</option>
+                                        <option value="Quezon City">Quezon City</option>
+                                        <option value="San Juan">San Juan</option>
+                                        <option value="Taguig">Taguig</option>
+                                        <option value="Valenzuela">Valenzuela</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="region" class="form-label">Region</label>
+                                    <input type="text" class="form-control" id="region" name="region" placeholder="Region..." required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="zipc" class="form-label">ZIP Code</label>
+                                    <input type="text" class="form-control" id="zipc" name="zipc" placeholder="ZIP Code..." required>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" name="city" placeholder="City...">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="region" class="form-label">Region</label>
-                                <input type="text" class="form-control" id="region" name="region" placeholder="Region...">
-                            </div>
+                    <div id="pickup-fields" style="display:none;">
+                        <h3>Pickup Details</h3>
+                        <div class="mb-3">
+                            <label for="special_instructions" class="form-label">Special Instructions</label>
+                            <textarea class="form-control" id="special_instructions" name="special_instructions" rows="3"></textarea>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="zipc" class="form-label">ZIP Code</label>
-                                <input type="text" class="form-control" id="zipc" name="zipc" placeholder="ZIP Code...">
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <p>Delivery Fee: ₱<span id="delivery-fee">{{ delivery_fee }}</span></p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Checkout</button>
+                    <button type="submit" class="btn btn-primary">Place Order</button>
                 </form>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function toggleFields(value) {
+        const deliveryFields = document.getElementById('delivery-fields');
+        const pickupFields = document.getElementById('pickup-fields');
+        if (value === 'delivery') {
+            deliveryFields.style.display = 'block';
+            pickupFields.style.display = 'none';
+        } else if (value === 'pickup') {
+            deliveryFields.style.display = 'none';
+            pickupFields.style.display = 'block';
+        } else {
+            deliveryFields.style.display = 'none';
+            pickupFields.style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}
