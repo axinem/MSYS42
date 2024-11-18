@@ -19,7 +19,7 @@ def product_detail(request, product_id):
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     selected_size = request.POST.get('size')
-    quantity = int(request.POST.get('quantity', 1))  
+    quantity = int(request.POST.get('quantity'))  
 
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -28,9 +28,9 @@ def add_to_cart(request, product_id):
 
     cart_item, created = CartItem.objects.get_or_create(product=product, size=selected_size)
 
-    if created:
-        cart_item.quantity = quantity 
+    if created: 
         cart.items.add(cart_item)
+        cart_item.quantity = quantity
     else:
         cart_item.quantity += quantity  
         cart_item.save()
@@ -70,7 +70,6 @@ def cart_view(request):
 
     return render(request, 'cart.html', {'items': items, 'total_price': total_price})
   
-  
 def update_cart(request):
     if request.method == 'POST':
         for item_id, quantity in request.POST.items():
@@ -91,6 +90,9 @@ def update_cart(request):
             item_id = request.POST.get('delete_item')
             try:
                 item = CartItem.objects.get(id=item_id)
+                product = get_object_or_404(Product, id=item_id)
+                if item.size == '100g':
+                    product.stock_100g += quantity
                 item.delete()
                 messages.success(request, f'{item.product.name} has been deleted from your cart.')
             except CartItem.DoesNotExist:
