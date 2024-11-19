@@ -1,8 +1,18 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.conf import settings
 
 # Create your models here.
+
+
+    
+def minValue(value):
+    if value < 0.00:
+        raise ValidationError(
+            ("%(value)s must be above 0."),
+            params={"value": value},
+        )
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -10,9 +20,9 @@ class Product(models.Model):
     image = models.ImageField(upload_to='images/')  
     
 
-    price_100g = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    price_4L = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    price_6L = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    price_100g = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, validators=[minValue])
+    price_4L = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, validators=[minValue])
+    price_6L = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, validators=[minValue])
     
     stock_100g = models.PositiveIntegerField(default=0)
     stock_4L = models.PositiveIntegerField(default=0)
