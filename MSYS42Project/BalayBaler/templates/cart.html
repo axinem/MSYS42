@@ -22,9 +22,7 @@
                         <tr>
                             <td>{{ item.product.name }}</td>
                             <td>{{ item.size }}</td>
-                            <td>
-                                <input type="number" name="quantity_{{ item.id }}" value="{{ item.quantity }}" min="0" class="form-control">
-                            </td>
+                            <td>{{ item.quantity }}</td>
                             <td>
                                 {% if item.size == '100g' %}
                                     {{ item.product.price_100g|floatformat:2 }}

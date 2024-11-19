@@ -70,6 +70,7 @@ def cart_view(request):
 
     return render(request, 'cart.html', {'items': items, 'total_price': total_price})
   
+  
 def update_cart(request):
     if request.method == 'POST':
         for item_id, quantity in request.POST.items():
@@ -90,9 +91,6 @@ def update_cart(request):
             item_id = request.POST.get('delete_item')
             try:
                 item = CartItem.objects.get(id=item_id)
-                product = get_object_or_404(Product, id=item_id)
-                if item.size == '100g':
-                    product.stock_100g += quantity
                 item.delete()
                 messages.success(request, f'{item.product.name} has been deleted from your cart.')
             except CartItem.DoesNotExist:
