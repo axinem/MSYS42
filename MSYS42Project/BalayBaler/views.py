@@ -26,7 +26,7 @@ def add_to_cart(request, product_id):
     else:
         cart = Cart() 
 
-    cart_item, created = CartItem.objects.get_or_create(product=product, size=selected_size)
+    cart_item, created = CartItem.objects.get_or_create(product=product, size=selected_size, quantity=quantity)
 
     if created: 
         cart.items.add(cart_item)
