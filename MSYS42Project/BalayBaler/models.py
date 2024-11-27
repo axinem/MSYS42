@@ -47,7 +47,20 @@ class Cart(models.Model):
     def __str__(self):
         return f"Cart of {self.user.username}"
     
-    
+class Customer(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    fname = models.CharField(max_length=100)
+    lname = models.CharField(max_length=100)
+    phnum = models.PositiveIntegerField(default=0)
+    email = models.CharField(max_length=100)
+    mode = models.CharField(max_length=10)
+    add1 = models.CharField(max_length=100)
+    add2 = models.CharField(max_length=100)
+    city = models.CharField(max_length=20)
+    region = models.CharField(max_length=10)
+    zip = models.IntegerField(default=0)
+    delivery = models.IntegerField(default=100)
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()

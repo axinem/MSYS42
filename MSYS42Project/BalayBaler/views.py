@@ -152,15 +152,6 @@ def checkout(request):
             if not zipc:
                 error_messages.append("ZIP Code is required.")
 
-            if city in ['Manila']:
-                delivery_fee = 250
-            elif city in ['Mandaluyong', 'Marikina', 'Pasig', 'Quezon City', 'San Juan']:
-                delivery_fee = 300
-            elif city in ['Caloocan', 'Malabon', 'Navotas', 'Valenzuela']:
-                delivery_fee = 350
-            elif city in ['Las Piñas', 'Makati', 'Muntinlupa', 'Parañaque', 'Pasay', 'Pateros', 'Taguig']:
-                delivery_fee = 100
-
         elif delivery_type == 'pickup':
             special_instructions = request.POST.get('special_instructions')
         

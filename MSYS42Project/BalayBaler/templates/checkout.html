@@ -3,9 +3,10 @@
 
 {% block extra_styles %}
 <style>
-    .card {
+    div.card {
         padding: 20px;
-        color: white;
+        border: 0;
+        background-color: red;
     }
     .form-label {
         color: #c77663;
@@ -14,6 +15,7 @@
         border-radius: 20px;
         font-size: 15px;
         margin-bottom: 15px; 
+        margin-left: 10px
     }
     .btn-primary {
         border-radius: 20px;
@@ -24,6 +26,8 @@
         flex-direction: column;
         align-items: stretch;
         gap: 20px;
+        background-color: red;
+        border: 0;
     }
     .header-section h1 {
         margin: 0;
@@ -49,7 +53,12 @@
                 <h1 class="mb-4">Checkout</h1>
                 <form method="POST" action="{% url 'process_order' %}">{% csrf_token %}
                     <div class="row">
-                        <script>
+                        <style>
+                            #delivery_fields, #pickup_fields {
+                                display: none;
+                            }
+                        </style>
+                        <script type="text/javascript">
                             function lettersOnly(input) {
                                 input.value = input.value.replace(/[^a-zA-Z]/g, '');
                               }
@@ -83,16 +92,32 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="delivery_type" class="form-label">Delivery or Pickup</label>
-                        <select id="delivery_type" name="delivery_type" class="form-control" onchange="toggleFields(this.value)">
-                            <option value="">Select...</option>
-                            <option value="delivery">Delivery</option>
-                            <option value="pickup">Pickup</option>
-                        </select>
-                    </div>
+                    <style type="text/css">
+                        #delivery_fields {
+                          display: none;
+                        }
+                      </style>
+                      <label for="delivery_type" class="form-label">Delivery or Pickup</label>
+                    <select id="delivery_type" name="delivery_type" class="form-control" style="margin-bottom: 10px;">
+                        <option value="">Select...</option>
+                        <option value="delivery_fields">Delivery</option>
+                        <option value="pickup_fields">Pickup</option>
+                   </select>
+                  
+                  </body>
+                  <script type="text/javascript">
+                    const select = document.getElementById('delivery_type');
 
-                    <div id="delivery-fields" style="display:none;">
+                    select.addEventListener('change', function () {
+                        for (let otherDiv of document.querySelectorAll('#hide div')) {
+                            otherDiv.style.display = 'none';
+                        }
+                        
+                        const div = document.getElementById(this.value);
+                        div.style.display = 'block';
+                    });
+                  </script>
+                    <div id="delivery_fields">
                         <h3>Delivery Details</h3>
                         <div class="row">
                             <div class="col-md-6">
@@ -113,7 +138,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="city" class="form-label">City</label>
-                                    <select id="city" name="city" class="form-control" required>
+                                    <select id="city" name="city" class="form-control" required onchange="test(this);">
                                         <option value="">Select City...</option>
                                         <option value="Manila">Manila</option>
                                         <option value="Caloocan">Caloocan</option>
@@ -150,18 +175,37 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div id="pickup-fields" style="display:none;">
-                        <h3>Pickup Details</h3>
+                        <script>
+                            window.test = function (e) {
+                                if (e.value == 'Manila') {
+                                    document.getElementById("delivery_fee").innerHTML = "250"
+                                }
+                                else if (e.value == 'Mandaluyong' || e.value == 'Marikina' || e.value == 'Pasig' || e.value == 'Quezon City' || e.value == 'San Juan' ) {
+                                    document.getElementById("delivery_fee").innerHTML = "300"
+                                }
+                                else if (e.value == 'Caloocan' || e.value == 'Malabon' || e.value == 'Navotas' || e.value == 'Valenzuela' ) {
+                                    document.getElementById("delivery_fee").innerHTML = "350"
+                                }
+                                else if (e.value == 'Las Piñas' || e.value == 'Makati' || e.value == 'Muntinlupa' || e.value == 'Parañaque' || e.value == 'Pasay' || e.value == 'Pateros' || e.value == 'Taguig') {
+                                    document.getElementById("delivery_fee").innerHTML = "100"
+                                }
+                                else {
+                                    document.getElementById("delivery_fee").innerHTML = "0"
+                                }
+                            }
+                        </script>
                         <div class="mb-3">
-                            <label for="special_instructions" class="form-label">Special Instructions</label>
-                            <textarea class="form-control" id="special_instructions" name="special_instructions" rows="3"></textarea>
+                            <p>Delivery Fee: ₱<span id="delivery_fee"></span></p>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <p>Delivery Fee: ₱<span id="delivery-fee">{{ delivery_fee }}</span></p>
+                    <div id="pickup_fields">
+                        <h3>Pickup Details</h3>
+                        <div class="mb-3">
+                            <p> You will be emailed with a confirmation re: the status of your order, as well as when it will be ready for pickup. Pickup details will be sent through the confirmation email. In the meantime, feel free to include any special instructions here!</p>
+                            <label for="special_instructions" class="form-label">Special Instructions</label>
+                            <textarea class="form-control" id="special_instructions" name="special_instructions" rows="3"></textarea>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Place Order</button>
@@ -169,23 +213,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block extra_scripts %}
-<script>
-    function toggleFields(value) {
-        const deliveryFields = document.getElementById('delivery-fields');
-        const pickupFields = document.getElementById('pickup-fields');
-        if (value === 'delivery') {
-            deliveryFields.style.display = 'block';
-            pickupFields.style.display = 'none';
-        } else if (value === 'pickup') {
-            deliveryFields.style.display = 'none';
-            pickupFields.style.display = 'block';
-        } else {
-            deliveryFields.style.display = 'none';
-            pickupFields.style.display = 'none';
-        }
-    }
-</script>
 {% endblock %}
