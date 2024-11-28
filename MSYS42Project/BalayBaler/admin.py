@@ -11,8 +11,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('name',)
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('cart', 'fname', 'lname', 'phnum', 'email', 'mode', 'add1', 'add2', 'city', 'region', 'zip', 'delivery')
-    fields = ('cart', 'fname', 'lname', 'phnum', 'email', 'mode', 'add1', 'add2', 'city', 'region', 'zip', 'delivery')
+    list_display = ('cart', 'fname', 'lname', 'phnum', 'email', 'mode', 'add1', 'add2', 'city', 'region', 'zip', 'delivery', 'specints')
+    fields = ('cart', 'fname', 'lname', 'phnum', 'email', 'mode', 'add1', 'add2', 'city', 'region', 'zip', 'delivery','specints')
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Customer, CustomerAdmin)

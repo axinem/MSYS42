@@ -54,12 +54,16 @@ class Customer(models.Model):
     phnum = models.PositiveIntegerField(default=0)
     email = models.CharField(max_length=100)
     mode = models.CharField(max_length=10)
-    add1 = models.CharField(max_length=100)
-    add2 = models.CharField(max_length=100)
-    city = models.CharField(max_length=20)
-    region = models.CharField(max_length=10)
-    zip = models.IntegerField(default=0)
-    delivery = models.IntegerField(default=100)
+    add1 = models.CharField(max_length=100, blank=True, null=True)
+    add2 = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=20, blank=True, null=True)
+    region = models.CharField(max_length=10, blank=True, null=True)
+    zip = models.IntegerField(default=0, blank=True, null=True)
+    delivery = models.IntegerField(default=100, blank=True, null=True) #deli fee
+    specints = models.CharField(max_length=1000, blank=True, null=True)
+    
+    def __str__(self):
+        return self.lname
 
 class Category(models.Model):
     name = models.CharField(max_length=100)

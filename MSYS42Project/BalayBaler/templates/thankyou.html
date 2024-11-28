@@ -3,8 +3,8 @@
 {% block content %}
 
     <div class="container mt-5">
-        <div >
-            <h1 class="mb-4">Thank You for Your Order!</h1>
+        <div>   
+        <h1 class="mb-4">Thank You for Your Order!</h1>
             <p>Your order has been placed successfully.</p>
 
             <!--<h3>Order Summary</h3>
@@ -14,6 +14,13 @@
                 <li>Email: {{ request.session.email }}</li>
                 <li>Delivery Address: {{ request.session.add1 }}, {{ request.session.city }}, {{ request.session.region }} {{ request.session.zipc }}</li>
             </ul>-->
+            
+    {% for item in Cart %}
+    <table> 
+        <tr><td>{{ item.user }}<td></tr>
+        <tr>{{ item.items }}</tr>
+    </table>
+{% endfor %}
         </div>
     </div>
 {% endblock %}

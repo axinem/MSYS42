@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import Product, Cart, CartItem
+from .models import Product, Cart, CartItem, Customer
 from django.contrib import messages
 
 
@@ -91,6 +91,17 @@ def update_cart(request):
             item_id = request.POST.get('delete_item')
             try:
                 item = CartItem.objects.get(id=item_id)
+                '''
+                product = get_object_or_404(Product, id=item_id)
+
+                selected_size = CartItem.objects.get(quantity=quantity)
+                if selected_size == '100g':
+                    product.stock_100g += quantity
+                elif selected_size == '4L':
+                    product.stock_4L += quantity
+                elif selected_size == '6L':
+                    product.stock_6L += quantity
+                ''' 
                 item.delete()
                 messages.success(request, f'{item.product.name} has been deleted from your cart.')
             except CartItem.DoesNotExist:
@@ -160,11 +171,15 @@ def checkout(request):
                 messages.error(request, message)
             return render(request, 'checkout.html', {'delivery_fee': delivery_fee})
 
+        customer = Customer.objects.create(fname='fname', lname='lname', phnum='phonenum', email='email', mode='delivery_type')
+        customer.save()
         messages.success(request, 'Your order has been successfully placed!')
-        return redirect('thankyou.html')
-
+        return redirect('payment.html')
+    
     return render(request, 'checkout.html')
 
+def payment(request):
+    return render(request, 'payment.html')
 
 def process_order(request):
     if request.method == 'POST':
@@ -180,7 +195,7 @@ def process_order(request):
 
         messages.success(request, "Order placed successfully!")
 
-        return redirect('thankyou')
+        return redirect('payment')
     
     else:
         return redirect('checkout')
@@ -203,4 +218,5 @@ def thankyou(request):
     if 'zipc' in request.session:
         del request.session['zipc']
 
-    return render(request, 'thankyou.html')
+    cart = Cart.objects.all()
+    return render(request, 'thankyou.html',{'Cart': cart})
